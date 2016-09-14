@@ -1,0 +1,59 @@
+{
+  "project_info": {
+    "project_number": "672871039224",
+    "firebase_url": "https://fir-esoochi.firebaseio.com",
+    "project_id": "firebase-esoochi",
+    "storage_bucket": "firebase-esoochi.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:672871039224:android:21dd0cbfb2dc558a",
+        "android_client_info": {
+          "package_name": "edu.iu.mobiperv.android.esoochi"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "672871039224-p9b6athjjbd4tkaf77htuak439v4n6g3.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "edu.iu.mobiperv.android.esoochi",
+            "certificate_hash": "AD1A7CBF2AA1BA44F89D7D0B1D33BB2E91A6C564"
+          }
+        },
+        {
+          "client_id": "672871039224-pfpfsbegkf07onddbg7nkqsrs1r0tn0q.apps.googleusercontent.com",
+          "client_type": 3
+        },
+        {
+          "client_id": "672871039224-c9suh89ca4bfifob98nm5ikchhmfi595.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyDS3CfHGsIleNaFoPIFGOikTAOHzxkm05s"
+        }
+      ],
+      "services": {
+        "analytics_service": {
+          "status": 1
+        },
+        "appinvite_service": {
+          "status": 2,
+          "other_platform_oauth_client": [
+            {
+              "client_id": "672871039224-pfpfsbegkf07onddbg7nkqsrs1r0tn0q.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        },
+        "ads_service": {
+          "status": 2
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
