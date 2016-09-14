@@ -2,15 +2,12 @@ package edu.iu.mobiperv.android.esoochi;
 
 import android.app.ProgressDialog;
 import android.content.Intent;
-import android.net.Uri;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.View;
 import android.widget.TextView;
 
-import com.google.android.gms.appindexing.Action;
-import com.google.android.gms.appindexing.AppIndex;
 import com.google.android.gms.auth.api.Auth;
 import com.google.android.gms.auth.api.signin.GoogleSignInAccount;
 import com.google.android.gms.auth.api.signin.GoogleSignInOptions;
@@ -22,6 +19,9 @@ import com.google.android.gms.common.api.OptionalPendingResult;
 import com.google.android.gms.common.api.ResultCallback;
 import com.google.android.gms.common.api.Status;
 
+import edu.iu.mobiperv.android.esoochi.edu.iu.mobiperv.android.esoochi.util.GoogleAuthClient;
+import edu.iu.mobiperv.android.esoochi.edu.iu.mobiperv.android.esoochi.util.SignedInUser;
+
 public class SigninActivity extends AppCompatActivity implements
         GoogleApiClient.OnConnectionFailedListener,
         View.OnClickListener {
@@ -32,6 +32,10 @@ public class SigninActivity extends AppCompatActivity implements
     private GoogleApiClient mGoogleApiClient;
     private TextView mStatusTextView;
     private ProgressDialog mProgressDialog;
+
+    // Customer defined Singleton classes
+    private GoogleAuthClient mGoogleAuthClient;
+    private SignedInUser mSignedInUser;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -59,6 +63,7 @@ public class SigninActivity extends AppCompatActivity implements
                 .enableAutoManage(this /* FragmentActivity */, this /* OnConnectionFailedListener */)
                 .addApi(Auth.GOOGLE_SIGN_IN_API, gso)
                 .build();
+
         // [END build_client]
 
         // [START customize_button]
@@ -121,10 +126,11 @@ public class SigninActivity extends AppCompatActivity implements
         if (result.isSuccess()) {
             // Signed in successfully, show authenticated UI.
             GoogleSignInAccount acct = result.getSignInAccount();
-            Log.d(TAG, "Photo url: " + String.valueOf(acct.getPhotoUrl()));
-            Log.d(TAG, "Unique ID: " + acct.getId());
-            Log.d(TAG, "Email: " + acct.getEmail());
-            mStatusTextView.setText(getString(R.string.signed_in_fmt, acct.getDisplayName()));
+
+            // set SignedInUser singleton class
+            mSignedInUser = SignedInUser.getLoggedInUser(acct);
+            Log.d(TAG, "SignedIn User: " + mSignedInUser.getAccount().getDisplayName());
+            mStatusTextView.setText(getString(R.string.signed_in_fmt, mSignedInUser.getAccount().getDisplayName()));
             updateUI(true);
         } else {
             // Signed out, show unauthenticated UI.
@@ -139,20 +145,6 @@ public class SigninActivity extends AppCompatActivity implements
         startActivityForResult(signInIntent, RC_SIGN_IN);
     }
     // [END signIn]
-
-    // [START signOut]
-    private void signOut() {
-        Auth.GoogleSignInApi.signOut(mGoogleApiClient).setResultCallback(
-                new ResultCallback<Status>() {
-                    @Override
-                    public void onResult(Status status) {
-                        // [START_EXCLUDE]
-                        updateUI(false);
-                        // [END_EXCLUDE]
-                    }
-                });
-    }
-    // [END signOut]
 
     // [START revokeAccess]
     private void revokeAccess() {
@@ -194,7 +186,10 @@ public class SigninActivity extends AppCompatActivity implements
     private void updateUI(boolean signedIn) {
         if (signedIn) {
             findViewById(R.id.sign_in_button).setVisibility(View.GONE);
-//            findViewById(R.id.sign_out_and_disconnect).setVisibility(View.VISIBLE);
+
+            Log.d(TAG, "Navigating to UserDetailsActivity");
+            Intent i = new Intent(getApplicationContext(), UserDetailsActivity.class);
+            startActivity(i);
         } else {
             mStatusTextView.setText(R.string.message);
 
