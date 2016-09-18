@@ -9,7 +9,6 @@ import android.support.v4.app.FragmentPagerAdapter;
 import android.support.v4.view.ViewPager;
 import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
-import android.support.v7.widget.Toolbar;
 import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
@@ -80,8 +79,8 @@ public class ListActivity extends AppCompatActivity {
 
     private void setupViewPager(ViewPager viewPager) {
         ViewPagerAdapter adapter = new ViewPagerAdapter(getSupportFragmentManager());
-        adapter.addFragment(new OneFragment(), "My Items");
-        adapter.addFragment(new TwoFragment(), "Groups");
+        adapter.addFragment(new ItemFragment(), "My Items");
+        adapter.addFragment(new GroupFragment(), "Groups");
         viewPager.setAdapter(adapter);
     }
 
