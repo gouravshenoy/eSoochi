@@ -1,6 +1,7 @@
 package edu.iu.mobiperv.android.esoochi;
 
 import android.content.DialogInterface;
+import android.content.Intent;
 import android.os.Bundle;
 import android.support.design.widget.FloatingActionButton;
 import android.support.design.widget.TabLayout;
@@ -8,8 +9,10 @@ import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
 import android.support.v4.app.FragmentPagerAdapter;
 import android.support.v4.view.ViewPager;
+import android.support.v7.app.ActionBar;
 import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
+import android.support.v7.widget.Toolbar;
 import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
@@ -30,11 +33,25 @@ public class ListActivity extends AppCompatActivity {
     private TabLayout tabLayout;
     private ViewPager viewPager;
     FloatingActionButton fab;
+    Toolbar toolbar1;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+
+        /*final Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
+        setSupportActionBar(toolbar);
+        ActionBar actionBar = getSupportActionBar();
+        if (actionBar != null) {
+            actionBar.setHomeButtonEnabled(true);
+            actionBar.setDisplayHomeAsUpEnabled(true);
+        }*/
+
+        //setUpNavigationDrawer();
+
         setContentView(R.layout.activity_list);
+
+        Log.d(TAG, GlobalUtils.itemList.toString());
 
         //toolbar = (Toolbar) findViewById(R.id.toolbar);
         //setSupportActionBar(toolbar);
@@ -47,6 +64,17 @@ public class ListActivity extends AppCompatActivity {
         tabLayout = (TabLayout) findViewById(R.id.tabs);
         tabLayout.setupWithViewPager(viewPager);
 
+        fab = (FloatingActionButton) findViewById(R.id.add_list_item_button);
+        fab.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                Log.d(TAG, "Clicked : " + Constants.ITEM_LIST_TAG);
+                Intent intent = new Intent(fab.getContext(), AddItemActivity.class);
+                startActivity(intent);
+
+            }
+        });
+
         tabLayout.addOnTabSelectedListener(new TabLayout.OnTabSelectedListener() {
             @Override
             public void onTabSelected(TabLayout.Tab tab) {
@@ -57,25 +85,8 @@ public class ListActivity extends AppCompatActivity {
                         @Override
                         public void onClick(View view) {
                             Log.d(TAG, "Clicked : " + Constants.ITEM_LIST_TAG);
-                            final EditText taskEditText = new EditText(fab.getContext());
-                            AlertDialog dialog = new AlertDialog.Builder(fab.getContext())
-                                    .setTitle("Add a new item")
-                                    .setMessage("Enter item name")
-                                    .setView(taskEditText)
-                                    .setPositiveButton("Add", new DialogInterface.OnClickListener() {
-                                        @Override
-                                        public void onClick(DialogInterface dialog, int which) {
-                                            String item = String.valueOf(taskEditText.getText());
-                                            Log.d(TAG, "Item to add: " + item);
-
-                                            GlobalUtils.itemList.add(item);
-
-
-                                        }
-                                    })
-                                    .setNegativeButton("Cancel", null)
-                                    .create();
-                            dialog.show();
+                            Intent intent = new Intent(fab.getContext(), AddItemActivity.class);
+                            startActivity(intent);
                         }
                     });
                 }
@@ -118,8 +129,6 @@ public class ListActivity extends AppCompatActivity {
 
             }
         });
-
-        fab = (FloatingActionButton) findViewById(R.id.add_list_item_button);
     }
 
     @Override

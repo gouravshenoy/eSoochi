@@ -53,13 +53,18 @@ public class ItemFragment extends Fragment {
      */
     public List<String> getItemsFromServer() {
 
-        List<String> itemsFromServer = new ArrayList<String>();
+        List<String> itemsFromServer;
 
-        // TODO: Return data from server. Returning dummy data for now.
-        itemsFromServer.add("Cabbage");
-        itemsFromServer.add("Chicken");
-        itemsFromServer.add("Protein Drink");
-        itemsFromServer.add("Cereals");
+        if(GlobalUtils.itemList != null && GlobalUtils.itemList.size() != 0) {
+            itemsFromServer = GlobalUtils.itemList;
+        } else {
+            // TODO: Return data from server. Returning dummy data for now.
+            itemsFromServer = new ArrayList<String>();
+            itemsFromServer.add("Cabbage");
+            itemsFromServer.add("Chicken");
+            itemsFromServer.add("Protein Drink");
+            itemsFromServer.add("Cereals");
+        }
 
         return itemsFromServer;
     }
