@@ -22,15 +22,28 @@ import edu.iu.mobiperv.esoochi.rest.jaxb.ObjectFactory;
 import edu.iu.mobiperv.esoochi.util.JPAUtil;
 import edu.iu.mobiperv.esoochi.util.JaxbTransformer;
 
+/**
+ * The Class GroupResource.
+ */
 @Path("group")
 public class GroupResource {
 
+	/** The factory. */
 	ObjectFactory factory = new ObjectFactory();
-	Log logger = LogFactory.getLog(UserResource.class);
 	
+	/** The logger. */
+	Log logger = LogFactory.getLog(GroupResource.class);
+	
+	/** The request. */
 	@Context 
 	HttpServletRequest request;
 	
+	/**
+	 * Find group.
+	 *
+	 * @param groupId the group id
+	 * @return the response
+	 */
 	@Path("{groupId}")
 	@GET
 	@Produces({MediaType.APPLICATION_JSON, MediaType.APPLICATION_XML})
@@ -43,6 +56,12 @@ public class GroupResource {
 		return builder.build();
 	}
 	
+	/**
+	 * Creates the user group.
+	 *
+	 * @param userGroup the user group
+	 * @return the response
+	 */
 	@POST
 	@Consumes({MediaType.APPLICATION_JSON, MediaType.APPLICATION_XML})
 	@Produces({MediaType.APPLICATION_JSON, MediaType.APPLICATION_XML})
@@ -85,6 +104,12 @@ public class GroupResource {
 		return builder.build();
 	}
 	
+	/**
+	 * Adds the user to group.
+	 *
+	 * @param groupId the group id
+	 * @return the response
+	 */
 	@Path("{groupId}")
 	@PUT
 	@Consumes({MediaType.APPLICATION_JSON, MediaType.APPLICATION_XML})

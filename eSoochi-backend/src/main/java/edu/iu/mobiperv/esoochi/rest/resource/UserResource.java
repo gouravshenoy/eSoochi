@@ -18,12 +18,24 @@ import edu.iu.mobiperv.esoochi.rest.jaxb.ObjectFactory;
 import edu.iu.mobiperv.esoochi.util.JPAUtil;
 import edu.iu.mobiperv.esoochi.util.JaxbTransformer;
 
+/**
+ * The Class UserResource.
+ */
 @Path("user")
 public class UserResource {
 
+	/** The factory. */
 	ObjectFactory factory = new ObjectFactory();
+	
+	/** The logger. */
 	Log logger = LogFactory.getLog(UserResource.class);
 	
+	/**
+	 * Find user.
+	 *
+	 * @param userId the user id
+	 * @return the response
+	 */
 	@Path("{userId}")
 	@GET
 	@Produces({MediaType.APPLICATION_JSON, MediaType.APPLICATION_XML})
@@ -40,6 +52,12 @@ public class UserResource {
 		return builder.build();
 	}
 	
+	/**
+	 * Creates the user.
+	 *
+	 * @param user the user
+	 * @return the response
+	 */
 	@POST
 	@Consumes({MediaType.APPLICATION_JSON, MediaType.APPLICATION_XML})
 	@Produces({MediaType.APPLICATION_JSON, MediaType.APPLICATION_XML})

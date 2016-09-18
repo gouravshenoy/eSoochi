@@ -1,10 +1,16 @@
-import edu.iu.mobiperv.esoochi.dao.entity.UserGroup;
 import edu.iu.mobiperv.esoochi.dao.entity.InventoryItem;
 import edu.iu.mobiperv.esoochi.dao.entity.User;
+import edu.iu.mobiperv.esoochi.dao.entity.UserGroup;
 import edu.iu.mobiperv.esoochi.util.JPAUtil;
 
+/**
+ * The Class JPAUtilTest.
+ */
 public class JPAUtilTest {
 	
+	/**
+	 * Creates the entities.
+	 */
 	public void createEntities() {
 		UserGroup group = new UserGroup();
 		group.setName("TestGroup");
@@ -43,11 +49,17 @@ public class JPAUtilTest {
 		JPAUtil.saveEntity(item);
 	}
 	
+	/**
+	 * Find user.
+	 */
 	public void findUser() {
 		User user = JPAUtil.findUser("04a6d1e7-883b-4fea-a3f5-11e586c38db7");
 		System.out.println(user);
 	}
 	
+	/**
+	 * Find user group.
+	 */
 	public void findUserGroup() {
 		UserGroup ug = JPAUtil.findUserGroup("257f410c-699b-48f0-b1e2-c82781db118a");
 		System.out.println(ug.getName());
@@ -56,8 +68,13 @@ public class JPAUtilTest {
 		}
 	}
 	
+	/**
+	 * The main method.
+	 *
+	 * @param args the arguments
+	 */
 	public static void main(String[] args) {
-		JPAUtilTest test = new JPAUtilTest();
+//		JPAUtilTest test = new JPAUtilTest();
 //		test.createEntities();
 //		test.findUser();
 //		test.findUserGroup();

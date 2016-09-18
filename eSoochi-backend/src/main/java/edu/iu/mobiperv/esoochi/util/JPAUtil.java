@@ -8,11 +8,20 @@ import javax.persistence.EntityTransaction;
 import javax.persistence.Persistence;
 import javax.persistence.Query;
 
+import edu.iu.mobiperv.esoochi.dao.entity.InventoryItem;
 import edu.iu.mobiperv.esoochi.dao.entity.User;
 import edu.iu.mobiperv.esoochi.dao.entity.UserGroup;
 
+/**
+ * The Class JPAUtil.
+ */
 public class JPAUtil {
 
+	/**
+	 * Save entity.
+	 *
+	 * @param entity the entity
+	 */
 	/* (non-Javadoc)
 	 * @see edu.sga.apex.dao.EntityDAO#saveEntity(java.lang.Object)
 	 */
@@ -40,6 +49,12 @@ public class JPAUtil {
 		emf.close();
 	}
 	
+	/**
+	 * Find user.
+	 *
+	 * @param userId the user id
+	 * @return the user
+	 */
 	public static User findUser(String userId) {
 		// Connection details loaded from persistence.xml to create EntityManagerFactory.
 		EntityManagerFactory emf = Persistence.createEntityManagerFactory("jpa-esoochi");
@@ -58,6 +73,12 @@ public class JPAUtil {
 		return user;
 	}
 	
+	/**
+	 * Find user group.
+	 *
+	 * @param groupId the group id
+	 * @return the user group
+	 */
 	public static UserGroup findUserGroup(String groupId) {
 		// Connection details loaded from persistence.xml to create EntityManagerFactory.
 		EntityManagerFactory emf = Persistence.createEntityManagerFactory("jpa-esoochi");
@@ -77,6 +98,11 @@ public class JPAUtil {
 		return group;
 	}
 	
+	/**
+	 * Gets the users.
+	 *
+	 * @return the users
+	 */
 	@SuppressWarnings("unchecked")
 	public static List<User> getUsers() {
 		// Connection details loaded from persistence.xml to create EntityManagerFactory.
@@ -93,4 +119,26 @@ public class JPAUtil {
 		
 		return users;
 	}
+	
+	/**
+	 * Find inventory item.
+	 *
+	 * @param itemId the item id
+	 * @return the inventory item
+	 */
+	public static InventoryItem findInventoryItem(String itemId) {
+		// Connection details loaded from persistence.xml to create EntityManagerFactory.
+		EntityManagerFactory emf = Persistence.createEntityManagerFactory("jpa-esoochi");
+
+		EntityManager em = emf.createEntityManager();
+		
+		InventoryItem item = (InventoryItem) em.find(InventoryItem.class, itemId);
+		
+		// Closing connection.
+		em.close();
+		emf.close();
+		
+		return item;
+	}
+	
 }

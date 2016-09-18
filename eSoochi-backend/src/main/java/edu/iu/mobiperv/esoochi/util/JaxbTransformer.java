@@ -11,10 +11,20 @@ import edu.iu.mobiperv.esoochi.rest.jaxb.UserGroup;
 import edu.iu.mobiperv.esoochi.rest.jaxb.InventoryItem;
 import edu.iu.mobiperv.esoochi.rest.jaxb.ObjectFactory;
 
+/**
+ * The Class JaxbTransformer.
+ */
 public class JaxbTransformer {
 	
+	/** The factory. */
 	static ObjectFactory factory = new ObjectFactory();
 	
+	/**
+	 * Gets the user jaxb.
+	 *
+	 * @param userEntity the user entity
+	 * @return the user jaxb
+	 */
 	public static User getUserJaxb(edu.iu.mobiperv.esoochi.dao.entity.User userEntity) {
 		User user = factory.createUser();
 		if(userEntity != null) {
@@ -36,6 +46,12 @@ public class JaxbTransformer {
 		return user;
 	}
 	
+	/**
+	 * Gets the user group jaxb.
+	 *
+	 * @param groupEntity the group entity
+	 * @return the user group jaxb
+	 */
 	public static UserGroup getUserGroupJaxb(edu.iu.mobiperv.esoochi.dao.entity.UserGroup groupEntity) {
 		UserGroup group = factory.createUserGroup();
 		if(groupEntity != null) {
@@ -54,14 +70,22 @@ public class JaxbTransformer {
 		return group;
 	}
 	
+	/**
+	 * Gets the item jaxb.
+	 *
+	 * @param itemEntity the item entity
+	 * @return the item jaxb
+	 */
 	public static InventoryItem getItemJaxb(edu.iu.mobiperv.esoochi.dao.entity.InventoryItem itemEntity) {
 		InventoryItem item = factory.createInventoryItem();
 		if(item != null) {
 			item.setItemId(itemEntity.getItemId());
 			item.setAddedByUserName(itemEntity.getAddedByUser().getFullName());
 			item.setAddedByUserId(itemEntity.getAddedByUser().getId());
-			item.setPurchasedByUserName(itemEntity.getPurchasedByUser().getFullName());
-			item.setPurchasedByUserId(itemEntity.getPurchasedByUser().getId());
+			if(itemEntity.getPurchasedByUser() != null) {
+				item.setPurchasedByUserName(itemEntity.getPurchasedByUser().getFullName());
+				item.setPurchasedByUserId(itemEntity.getPurchasedByUser().getId());
+			}
 			
 			item.setAddedInGroupName(itemEntity.getAddedInGroup().getName());
 			item.setAddedInGroupId(itemEntity.getAddedInGroup().getId());
@@ -78,6 +102,12 @@ public class JaxbTransformer {
 	}
 	
 	
+	/**
+	 * Gets the XML gregorian calendar.
+	 *
+	 * @param date the date
+	 * @return the XML gregorian calendar
+	 */
 	@SuppressWarnings("finally")
 	public static XMLGregorianCalendar getXMLGregorianCalendar(Date date) {
 		XMLGregorianCalendar calendar = null ;

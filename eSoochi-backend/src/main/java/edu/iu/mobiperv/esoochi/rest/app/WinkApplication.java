@@ -9,8 +9,14 @@ import edu.iu.mobiperv.esoochi.rest.resource.GroupResource;
 import edu.iu.mobiperv.esoochi.rest.resource.ItemResource;
 import edu.iu.mobiperv.esoochi.rest.resource.UserResource;
 
+/**
+ * The Class WinkApplication.
+ */
 public class WinkApplication extends Application{
 
+	/* (non-Javadoc)
+	 * @see javax.ws.rs.core.Application#getClasses()
+	 */
 	@Override
 	public Set<Class<?>> getClasses() {
 		Set<Class<?>> classes = new HashSet<Class<?>>();
