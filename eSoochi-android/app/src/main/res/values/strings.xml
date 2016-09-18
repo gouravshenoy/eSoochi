@@ -47,4 +47,5 @@
     <!-- Server Client ID.  This should be a valid Web OAuth 2.0 Client ID obtained
          from https://console.developers.google.com/ -->
     <string name="server_client_id">991953726300-onaogf8h30khm0r7sgvsa2p10lb1poo5.apps.googleusercontent.com</string>
+    <string name="title_activity_main2">Main2Activity</string>
 </resources>
