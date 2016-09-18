@@ -27,4 +27,18 @@
         android:layout_height="match_parent"
         app:layout_behavior="@string/appbar_scrolling_view_behavior" />
 
+    <android.support.design.widget.FloatingActionButton
+        android:id="@+id/add_list_item_button"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignParentBottom="true"
+        android:layout_alignParentRight="true"
+        android:layout_gravity="bottom"
+        android:clickable="true"
+        android:src="@drawable/ic_float_add_button"
+        android:layout_marginLeft="16dp"
+        android:layout_marginRight="16dp"
+        app:elevation="12dp"
+        app:backgroundTint="@color/blue_grey_500"/>
+
 </android.support.design.widget.CoordinatorLayout>
