@@ -1,10 +1,16 @@
-import edu.iu.mobiperv.esoochi.dao.entity.UserGroup;
 import edu.iu.mobiperv.esoochi.dao.entity.InventoryItem;
 import edu.iu.mobiperv.esoochi.dao.entity.User;
+import edu.iu.mobiperv.esoochi.dao.entity.UserGroup;
 import edu.iu.mobiperv.esoochi.util.JPAUtil;
 
+/**
+ * The Class JPAUtilTest.
+ */
 public class JPAUtilTest {
 	
+	/**
+	 * Creates the entities.
+	 */
 	public void createEntities() {
 		UserGroup group = new UserGroup();
 		group.setName("TestGroup");
@@ -28,6 +34,9 @@ public class JPAUtilTest {
 		item.setAddedInGroup(group);
 		item.setAddedByUser(user);
 		item.setPurchasedByUser(user2);
+		item.setItemAddress("Marsh, North Gourley Pike");
+		item.setAddressLatitude(28.85);
+		item.setAddressLongitude(-25.766667);
 		
 		group.getUsers().add(user);
 		group.getUsers().add(user2);
@@ -40,11 +49,17 @@ public class JPAUtilTest {
 		JPAUtil.saveEntity(item);
 	}
 	
+	/**
+	 * Find user.
+	 */
 	public void findUser() {
 		User user = JPAUtil.findUser("04a6d1e7-883b-4fea-a3f5-11e586c38db7");
 		System.out.println(user);
 	}
 	
+	/**
+	 * Find user group.
+	 */
 	public void findUserGroup() {
 		UserGroup ug = JPAUtil.findUserGroup("257f410c-699b-48f0-b1e2-c82781db118a");
 		System.out.println(ug.getName());
@@ -53,11 +68,38 @@ public class JPAUtilTest {
 		}
 	}
 	
+	/**
+	 * The main method.
+	 *
+	 * @param args the arguments
+	 */
 	public static void main(String[] args) {
-		JPAUtilTest test = new JPAUtilTest();
+//		JPAUtilTest test = new JPAUtilTest();
 //		test.createEntities();
-		test.findUser();
-		test.findUserGroup();
+//		test.findUser();
+//		test.findUserGroup();
+//		System.out.println("Creating user...");
+//		User user = new User();
+//		user.setFullName("Mary Com");
+//		user.setGoogleId("xs3dsd32qsajoi2ewjo");
+//		user.setEmailAddress("jmary@gmail.com");
+//		user.setPhotoUrl("http://google.com");
+//		
+//		JPAUtil.saveEntity(user);
+//		
+//		System.out.println("Fetching user...");
+//		User u = JPAUtil.findUser(user.getId());
+//		
+//		System.out.println("Creating group...");
+//		UserGroup ug = JPAUtil.findUserGroup("754ba4de-344c-43f3-8818-52193e5a23b7");
+//		ug.getUsers().add(u);
+//		u.getGroups().add(ug);
+//		
+//		System.out.println("Saving user...");
+//		JPAUtil.saveEntity(u);
+//		
+//		System.out.println("Saving group...");
+//		JPAUtil.saveEntity(ug);
 	}
 
 }

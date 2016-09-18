@@ -8,6 +8,9 @@
 	<name>eSoochi-backend</name>
 
 	<properties>
+		<!-- Jetty -->
+		<jettyVersion>9.2.11.v20150529</jettyVersion>
+		
 		<!-- JPA Version -->
 		<jpa.version>2.4.1</jpa.version>
 
@@ -29,12 +32,24 @@
 			<artifactId>wink-server</artifactId>
 			<version>1.4</version>
 		</dependency>
-
-		<!-- Apache Commons IO -->
+		
 		<dependency>
-			<groupId>commons-io</groupId>
-			<artifactId>commons-io</artifactId>
-			<version>2.4</version>
+			<groupId>org.apache.wink</groupId>
+			<artifactId>wink-json-provider</artifactId>
+			<version>1.4</version>
+		</dependency>
+
+		<dependency>
+			<groupId>org.json</groupId>
+			<artifactId>json</artifactId>
+			<version>20160212</version>
+		</dependency>
+
+		<!-- Apache Commons Logging -->
+		<dependency>
+			<groupId>commons-logging</groupId>
+			<artifactId>commons-logging</artifactId>
+			<version>1.2</version>
 		</dependency>
 
 		<!-- SLF4J Logging -->
@@ -72,6 +87,23 @@
 			<version>${junit.version}</version>
 			<scope>test</scope>
 		</dependency>
+		
+		<!-- Jetty server -->
+		<dependency>
+			<groupId>org.eclipse.jetty</groupId>
+			<artifactId>jetty-server</artifactId>
+			<version>${jettyVersion}</version>
+		</dependency>
+		<dependency>
+			<groupId>org.eclipse.jetty</groupId>
+			<artifactId>jetty-servlets</artifactId>
+			<version>${jettyVersion}</version>
+		</dependency>
+		<dependency>
+			<groupId>org.eclipse.jetty</groupId>
+			<artifactId>jetty-webapp</artifactId>
+			<version>${jettyVersion}</version>
+		</dependency>
 
 	</dependencies>
 
@@ -93,6 +125,25 @@
 			</testResource>
 		</testResources>
 		<plugins>
+			<plugin>
+				<!-- Plugin for maven-jetty -->
+				<groupId>org.eclipse.jetty</groupId>
+				<artifactId>jetty-maven-plugin</artifactId>
+				<version>${jettyVersion}</version>
+				<configuration>
+					<scanIntervalSeconds>10</scanIntervalSeconds>
+					<connectors>
+						<httpConnector>
+							<port>8080</port>
+						</httpConnector>
+					</connectors>
+					<webAppSourceDirectory>${project.basedir}/WebContent</webAppSourceDirectory>
+					<webApp>
+						<contextPath>/esoochi</contextPath>
+					</webApp>
+					<jettyXml>jetty.xml</jettyXml>
+				</configuration>
+			</plugin>
 			<plugin>
 				<groupId>org.apache.openjpa</groupId>
 				<artifactId>openjpa-maven-plugin</artifactId>
