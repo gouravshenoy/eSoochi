@@ -42,6 +42,15 @@ public class InventoryItem {
 	@Column
 	Date updatedAt;
 	
+	@Column
+	String itemAddress;
+	
+	@Column
+	double addressLatitude;
+	
+	@Column
+	double addressLongitude;
+	
 	public InventoryItem() {
 		this.itemId = UUID.randomUUID().toString();
 	}
@@ -101,7 +110,31 @@ public class InventoryItem {
 	public void setUpdatedAt(Date updatedAt) {
 		this.updatedAt = updatedAt;
 	}
+
+	public String getItemAddress() {
+		return itemAddress;
+	}
+
+	public void setItemAddress(String itemAddress) {
+		this.itemAddress = itemAddress;
+	}
 	
+	public double getAddressLatitude() {
+		return addressLatitude;
+	}
+
+	public void setAddressLatitude(double addressLatitude) {
+		this.addressLatitude = addressLatitude;
+	}
+
+	public double getAddressLongitude() {
+		return addressLongitude;
+	}
+
+	public void setAddressLongitude(double addressLongitude) {
+		this.addressLongitude = addressLongitude;
+	}
+
 	@PrePersist
 	void createdAt() {
 		this.createdAt = this.updatedAt = new Date();

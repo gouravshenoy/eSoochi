@@ -1,9 +1,12 @@
 package edu.iu.mobiperv.esoochi.util;
 
+import java.util.List;
+
 import javax.persistence.EntityManager;
 import javax.persistence.EntityManagerFactory;
 import javax.persistence.EntityTransaction;
 import javax.persistence.Persistence;
+import javax.persistence.Query;
 
 import edu.iu.mobiperv.esoochi.dao.entity.User;
 import edu.iu.mobiperv.esoochi.dao.entity.UserGroup;
@@ -44,7 +47,9 @@ public class JPAUtil {
 		EntityManager em = emf.createEntityManager();
 		
 		User user = (User) em.find(User.class, userId);
-		user.getGroups(); // because of lazy load
+		if(user != null) {
+			user.getGroups(); // because of lazy load
+		}
 		
 		// Closing connection.
 		em.close();
@@ -60,13 +65,32 @@ public class JPAUtil {
 		EntityManager em = emf.createEntityManager();
 		
 		UserGroup group = (UserGroup) em.find(UserGroup.class, groupId);
-		group.getUsers(); // because of lazy load
-		group.getItems(); // because of lazy load
+		if(group != null) {
+			group.getUsers(); // because of lazy load
+			group.getItems(); // because of lazy load
+		}
 		
 		// Closing connection.
 		em.close();
 		emf.close();
 		
 		return group;
+	}
+	
+	@SuppressWarnings("unchecked")
+	public static List<User> getUsers() {
+		// Connection details loaded from persistence.xml to create EntityManagerFactory.
+		EntityManagerFactory emf = Persistence.createEntityManagerFactory("jpa-esoochi");
+
+		EntityManager em = emf.createEntityManager();
+		
+		Query query = em.createQuery("SELECT u FROM User u");
+		List<User> users = query.getResultList();
+		
+		// Closing connection.
+		em.close();
+		emf.close();
+		
+		return users;
 	}
 }

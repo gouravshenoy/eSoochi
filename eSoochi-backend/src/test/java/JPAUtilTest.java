@@ -28,6 +28,9 @@ public class JPAUtilTest {
 		item.setAddedInGroup(group);
 		item.setAddedByUser(user);
 		item.setPurchasedByUser(user2);
+		item.setItemAddress("Marsh, North Gourley Pike");
+		item.setAddressLatitude(28.85);
+		item.setAddressLongitude(-25.766667);
 		
 		group.getUsers().add(user);
 		group.getUsers().add(user2);
@@ -56,8 +59,30 @@ public class JPAUtilTest {
 	public static void main(String[] args) {
 		JPAUtilTest test = new JPAUtilTest();
 //		test.createEntities();
-		test.findUser();
-		test.findUserGroup();
+//		test.findUser();
+//		test.findUserGroup();
+//		System.out.println("Creating user...");
+//		User user = new User();
+//		user.setFullName("Mary Com");
+//		user.setGoogleId("xs3dsd32qsajoi2ewjo");
+//		user.setEmailAddress("jmary@gmail.com");
+//		user.setPhotoUrl("http://google.com");
+//		
+//		JPAUtil.saveEntity(user);
+//		
+//		System.out.println("Fetching user...");
+//		User u = JPAUtil.findUser(user.getId());
+//		
+//		System.out.println("Creating group...");
+//		UserGroup ug = JPAUtil.findUserGroup("754ba4de-344c-43f3-8818-52193e5a23b7");
+//		ug.getUsers().add(u);
+//		u.getGroups().add(ug);
+//		
+//		System.out.println("Saving user...");
+//		JPAUtil.saveEntity(u);
+//		
+//		System.out.println("Saving group...");
+//		JPAUtil.saveEntity(ug);
 	}
 
 }
