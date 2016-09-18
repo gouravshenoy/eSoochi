@@ -3,11 +3,12 @@ package edu.iu.mobiperv.esoochi.dao.entity;
 import java.util.Date;
 import java.util.HashSet;
 import java.util.Set;
+import java.util.UUID;
 
+import javax.persistence.CascadeType;
 import javax.persistence.Column;
 import javax.persistence.Entity;
-import javax.persistence.GeneratedValue;
-import javax.persistence.GenerationType;
+import javax.persistence.FetchType;
 import javax.persistence.Id;
 import javax.persistence.JoinColumn;
 import javax.persistence.JoinTable;
@@ -19,8 +20,7 @@ import javax.persistence.PreUpdate;
 public class User {
 
 	@Id
-	@GeneratedValue(strategy=GenerationType.IDENTITY)
-	long id;
+	String id;
 	
 	@Column
 	String googleId;
@@ -40,17 +40,21 @@ public class User {
 	@Column
 	Date updatedAt;
 	
-	@ManyToMany
-	@JoinTable(name="USER_GROUP", 
-	joinColumns=@JoinColumn(name="USER_ID"), 
-	inverseJoinColumns=@JoinColumn(name="GROUP_ID"))
-	Set<Group> groups = new HashSet<Group>();
+	@ManyToMany(cascade = CascadeType.MERGE, fetch = FetchType.LAZY)
+	@JoinTable(name="USERGROUP_USER", 
+	joinColumns=@JoinColumn(name="USER_ID", referencedColumnName="id"), 
+	inverseJoinColumns=@JoinColumn(name="GROUP_ID", referencedColumnName="id"))
+	Set<UserGroup> groups = new HashSet<UserGroup>();
+	
+	public User() {
+		this.id = UUID.randomUUID().toString();
+	}
 
-	public long getId() {
+	public String getId() {
 		return id;
 	}
 
-	public void setId(long id) {
+	public void setId(String id) {
 		this.id = id;
 	}
 
@@ -86,11 +90,11 @@ public class User {
 		this.emailAddress = emailAddress;
 	}
 
-	public Set<Group> getGroups() {
+	public Set<UserGroup> getGroups() {
 		return groups;
 	}
 
-	public void setGroups(Set<Group> groups) {
+	public void setGroups(Set<UserGroup> groups) {
 		this.groups = groups;
 	}
 	

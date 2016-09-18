@@ -23,10 +23,11 @@ public class InventoryItem {
 	String itemName;
 	
 	@Column
-	@ManyToOne(fetch = FetchType.EAGER, cascade = CascadeType.ALL)
+	@ManyToOne
 	@JoinColumn(name = "addedInGroup")
-	Group addedInGroup;
+	UserGroup addedInGroup;
 	
+	@Column
 	@ManyToOne(fetch = FetchType.EAGER, cascade = CascadeType.ALL)
 	@JoinColumn(name = "addedByUser")
 	User addedByUser;
@@ -61,11 +62,11 @@ public class InventoryItem {
 		this.itemName = itemName;
 	}
 
-	public Group getAddedInGroup() {
+	public UserGroup getAddedInGroup() {
 		return addedInGroup;
 	}
 
-	public void setAddedInGroup(Group addedInGroup) {
+	public void setAddedInGroup(UserGroup addedInGroup) {
 		this.addedInGroup = addedInGroup;
 	}
 

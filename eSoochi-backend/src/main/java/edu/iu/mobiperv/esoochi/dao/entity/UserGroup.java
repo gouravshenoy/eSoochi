@@ -3,50 +3,57 @@ package edu.iu.mobiperv.esoochi.dao.entity;
 import java.util.Date;
 import java.util.HashSet;
 import java.util.Set;
+import java.util.UUID;
 
+import javax.persistence.CascadeType;
 import javax.persistence.Column;
 import javax.persistence.Entity;
-import javax.persistence.GeneratedValue;
-import javax.persistence.GenerationType;
+import javax.persistence.FetchType;
 import javax.persistence.Id;
 import javax.persistence.ManyToMany;
+import javax.persistence.OneToMany;
 import javax.persistence.PrePersist;
 import javax.persistence.PreUpdate;
 
 @Entity
-public class Group {
+public class UserGroup {
 	
 	@Id
-	@GeneratedValue(strategy=GenerationType.IDENTITY)
-	long id;
+	String id;
 	
 	@Column
-	String groupName;
+	String name;
 	
-	@Column
-	@ManyToMany
+	@ManyToMany(mappedBy = "groups", cascade = CascadeType.MERGE)
 	Set<User> users = new HashSet<User>();
-
-	public long getId() {
-		return id;
-	}
-
-	public void setId(long id) {
-		this.id = id;
-	}
 	
+	@OneToMany(mappedBy = "addedInGroup", cascade = CascadeType.MERGE)
+	Set<InventoryItem> items = new HashSet<InventoryItem>();
+
 	@Column
 	Date createdAt;
 
 	@Column
 	Date updatedAt;
-
-	public String getGroupName() {
-		return groupName;
+	
+	public UserGroup() {
+		this.id = UUID.randomUUID().toString();
+	}
+	
+	public String getId() {
+		return id;
 	}
 
-	public void setGroupName(String groupName) {
-		this.groupName = groupName;
+	public void setId(String id) {
+		this.id = id;
+	}
+
+	public String getName() {
+		return name;
+	}
+
+	public void setName(String name) {
+		this.name = name;
 	}
 
 	public Set<User> getUsers() {
@@ -73,6 +80,14 @@ public class Group {
 		this.updatedAt = updatedAt;
 	}
 
+	public Set<InventoryItem> getItems() {
+		return items;
+	}
+
+	public void setItems(Set<InventoryItem> items) {
+		this.items = items;
+	}
+
 	@PrePersist
 	void createdAt() {
 		this.createdAt = this.updatedAt = new Date();
@@ -88,8 +103,8 @@ public class Group {
 
 	@Override
 	public String toString() {
-		return "Group [id=" + id + ", groupName=" + groupName + ", users=" + users + ", createdAt=" + createdAt
-				+ ", updatedAt=" + updatedAt + "]";
+		return "UserGroup [id=" + id + ", name=" + name + ", users=" + users + ", items=" + items + ", createdAt="
+				+ createdAt + ", updatedAt=" + updatedAt + "]";
 	}
 
 }
