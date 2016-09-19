@@ -1,22 +1,37 @@
 package edu.iu.mobiperv.android.esoochi;
 
+import android.os.AsyncTask;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ArrayAdapter;
 import android.widget.ListView;
 
+import org.json.JSONArray;
+import org.json.JSONException;
+import org.json.JSONObject;
+
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Set;
 
+import edu.iu.mobiperv.android.esoochi.edu.iu.mobiperv.android.esoochi.util.Constants;
 import edu.iu.mobiperv.android.esoochi.edu.iu.mobiperv.android.esoochi.util.GlobalUtils;
+import edu.iu.mobiperv.android.esoochi.edu.iu.mobiperv.android.esoochi.util.SignedInUser;
+import okhttp3.MediaType;
+import okhttp3.OkHttpClient;
+import okhttp3.Request;
+import okhttp3.RequestBody;
+import okhttp3.Response;
 
 
 public class ItemFragment extends Fragment {
 
     ListView itemListView;
+    private static final String TAG = "eSoochi.ItemFragment";
 
     public ItemFragment() {
         // Required empty public constructor
@@ -39,7 +54,7 @@ public class ItemFragment extends Fragment {
 
         GlobalUtils.itemList = getItemsFromServer();
         ArrayAdapter<String> adapter = new ArrayAdapter<String>(rootView.getContext(),
-                android.R.layout.select_dialog_multichoice, GlobalUtils.itemList);
+                android.R.layout.select_dialog_multichoice, new ArrayList<>(GlobalUtils.itemList));
 
         itemListView.setAdapter(adapter);
 
@@ -51,21 +66,74 @@ public class ItemFragment extends Fragment {
      * Function that retrieves items for the user from server.
      * @return
      */
-    public List<String> getItemsFromServer() {
-
-        List<String> itemsFromServer;
-
-        // TODO: Return data from server. Returning dummy data with following dummy logic.
-        if(GlobalUtils.itemList != null && GlobalUtils.itemList.size() != 0) {
-            itemsFromServer = GlobalUtils.itemList;
-        } else {
-            itemsFromServer = new ArrayList<String>();
-            itemsFromServer.add("Cabbage");
-            itemsFromServer.add("Chicken");
-            itemsFromServer.add("Protein Drink");
-            itemsFromServer.add("Cereals");
+    public Set<String> getItemsFromServer() {
+        try {
+            for(JSONObject group : SignedInUser.getGroups()) {
+                new GetGroupTask().execute(group.getString("id"));
+//                if(group.has("items")) {
+//                    Object items = group.get("items");
+//                    if (items instanceof JSONArray) {
+//                        for (int i = 0; i < ((JSONArray) items).length(); i++) {
+//                            GlobalUtils.itemList.add(((JSONArray) items).getJSONObject(i).getString("itemName"));
+//                        }
+//                    } else {
+//                        GlobalUtils.itemList.add(((JSONObject) items).getString("itemName"));
+//                    }
+//                }
+            }
+        } catch (JSONException e) {
+            Log.e("ERROR", e.getMessage(), e);
         }
 
-        return itemsFromServer;
+        return GlobalUtils.itemList;
+    }
+
+    private class GetGroupTask extends AsyncTask<String, String, String> {
+        @Override
+        protected String doInBackground(String... data) {
+            try {
+                OkHttpClient client = new OkHttpClient();
+
+                Request request = new Request.Builder()
+                        .url(Constants.REST_ENDPOINT + "/group/" + data[0])
+                        .build();
+
+                Response response = client.newCall(request).execute();
+                return response.body().string();
+            } catch (Exception e) {
+                Log.e("ERROR", e.getMessage(), e);
+                return null;
+            }
+        }
+
+        @Override
+        protected void onPostExecute(String json) {
+            Log.d(TAG, "Group: " + json);
+            try {
+                JSONObject group = new JSONObject(json);
+                if(group.getJSONObject("userGroup").has("items")) {
+                    Object items = group.getJSONObject("userGroup").get("items");
+                    if (items instanceof JSONArray) {
+                        for (int i = 0; i < ((JSONArray) items).length(); i++) {
+                            GlobalUtils.itemList.add(((JSONArray) items).getJSONObject(i).getString("itemName"));
+                        }
+                    } else {
+                        GlobalUtils.itemList.add(((JSONObject) items).getString("itemName"));
+                    }
+                } else {
+                    Log.d(TAG, "no items");
+                }
+            } catch (Exception e) {
+                Log.e("ERROR", e.getMessage(), e);
+            }
+
+            Log.d(TAG, "ItemList: " + GlobalUtils.itemList);
+
+//            try {
+//                GlobalUtils.groupList.add(new JSONObject(json).getJSONObject("userGroup").getString("name"));
+//            } catch (JSONException e) {
+//                Log.e("ERROR", e.getMessage(), e);
+//            }
+        }
     }
 }

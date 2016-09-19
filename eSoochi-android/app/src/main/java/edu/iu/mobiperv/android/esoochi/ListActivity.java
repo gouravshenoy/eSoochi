@@ -2,6 +2,7 @@ package edu.iu.mobiperv.android.esoochi;
 
 import android.content.DialogInterface;
 import android.content.Intent;
+import android.os.AsyncTask;
 import android.os.Bundle;
 import android.support.design.widget.FloatingActionButton;
 import android.support.design.widget.TabLayout;
@@ -19,11 +20,20 @@ import android.view.MenuItem;
 import android.view.View;
 import android.widget.EditText;
 
+import org.json.JSONException;
+import org.json.JSONObject;
+
 import java.util.ArrayList;
 import java.util.List;
 
 import edu.iu.mobiperv.android.esoochi.edu.iu.mobiperv.android.esoochi.util.Constants;
 import edu.iu.mobiperv.android.esoochi.edu.iu.mobiperv.android.esoochi.util.GlobalUtils;
+import edu.iu.mobiperv.android.esoochi.edu.iu.mobiperv.android.esoochi.util.SignedInUser;
+import okhttp3.MediaType;
+import okhttp3.OkHttpClient;
+import okhttp3.Request;
+import okhttp3.RequestBody;
+import okhttp3.Response;
 
 public class ListActivity extends AppCompatActivity {
 
@@ -106,6 +116,18 @@ public class ListActivity extends AppCompatActivity {
                                             String group = String.valueOf(taskEditText.getText());
                                             Log.d(TAG, "Group to add: " + group);
 
+                                            JSONObject data = new JSONObject();
+                                            JSONObject request = new JSONObject();
+
+                                            try {
+                                                data.put("name", group);
+                                                request.put("group", data);
+                                            } catch (JSONException e) {
+                                                Log.e("ERROR", e.getMessage(), e);
+                                            }
+
+                                            Log.d(TAG, "Sending JSON data for Create Group: " + request.toString());
+                                            new CreateGroupTask().execute(request.toString());
                                             GlobalUtils.groupList.add(group);
 
                                         }
@@ -165,6 +187,13 @@ public class ListActivity extends AppCompatActivity {
         }
     }
 
+    @Override
+    protected void onStart() {
+        super.onStart();
+
+
+    }
+
     private void setupViewPager(ViewPager viewPager) {
         ViewPagerAdapter adapter = new ViewPagerAdapter(getSupportFragmentManager());
         adapter.addFragment(new ItemFragment(), Constants.ITEM_LIST_TAG);
@@ -198,6 +227,39 @@ public class ListActivity extends AppCompatActivity {
         @Override
         public CharSequence getPageTitle(int position) {
             return mFragmentTitleList.get(position);
+        }
+    }
+
+    private class CreateGroupTask extends AsyncTask<String, String, String> {
+        @Override
+        protected String doInBackground(String... data) {
+            try {
+                MediaType JSON = MediaType.parse("application/json; charset=utf-8");
+                OkHttpClient client = new OkHttpClient();
+                RequestBody body = RequestBody.create(JSON, data[0]);
+
+                Request request = new Request.Builder()
+                        .url(Constants.REST_ENDPOINT + "/group")
+                        .addHeader("user-id", SignedInUser.getUserId())
+                        .post(body)
+                        .build();
+
+                Response response = client.newCall(request).execute();
+                return response.body().string();
+            } catch (Exception e) {
+                Log.e("ERROR", e.getMessage(), e);
+                return null;
+            }
+        }
+
+        @Override
+        protected void onPostExecute(String json) {
+            Log.d(TAG, "Group: " + json);
+//            try {
+//                GlobalUtils.groupList.add(new JSONObject(json).getJSONObject("userGroup").getString("name"));
+//            } catch (JSONException e) {
+//                Log.e("ERROR", e.getMessage(), e);
+//            }
         }
     }
 }

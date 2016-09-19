@@ -3,6 +3,7 @@ package edu.iu.mobiperv.android.esoochi;
 import android.content.Intent;
 import android.location.Address;
 import android.location.Geocoder;
+import android.os.AsyncTask;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.util.Log;
@@ -13,6 +14,10 @@ import android.widget.Button;
 import android.widget.EditText;
 import android.widget.Spinner;
 
+import org.json.JSONArray;
+import org.json.JSONException;
+import org.json.JSONObject;
+
 import java.io.BufferedReader;
 import java.io.InputStreamReader;
 import java.net.HttpURLConnection;
@@ -22,7 +27,14 @@ import java.util.Locale;
 
 import javax.net.ssl.HttpsURLConnection;
 
+import edu.iu.mobiperv.android.esoochi.edu.iu.mobiperv.android.esoochi.util.Constants;
 import edu.iu.mobiperv.android.esoochi.edu.iu.mobiperv.android.esoochi.util.GlobalUtils;
+import edu.iu.mobiperv.android.esoochi.edu.iu.mobiperv.android.esoochi.util.SignedInUser;
+import okhttp3.MediaType;
+import okhttp3.OkHttpClient;
+import okhttp3.Request;
+import okhttp3.RequestBody;
+import okhttp3.Response;
 
 public class AddItemActivity extends AppCompatActivity {
 
@@ -73,6 +85,29 @@ public class AddItemActivity extends AppCompatActivity {
                         + selectedGroup + " with gps coordinates: "
                         + coordinates[0] + " | " + coordinates[1]);
 
+                JSONObject data = new JSONObject();
+                JSONObject request = new JSONObject();
+
+                try {
+                    data.put("addedByUserId", SignedInUser.getUserId());
+                    data.put("address", store_addr_text.getText().toString());
+                    data.put("latitude", coordinates[0]);
+                    data.put("longitude", coordinates[1]);
+                    data.put("itemName", item_name_text.getText().toString());
+                    for(JSONObject group : SignedInUser.getGroups()) {
+                        if(group.get("name").equals(selectedGroup)) {
+                            data.put("addedInGroupId", group.get("id"));
+                        }
+                    }
+                    request.put("inventoryItem", data);
+                } catch (JSONException e) {
+                    Log.e("ERROR", e.getMessage(), e);
+                }
+
+                Log.d(TAG, "Sending JSON data for Create User: " + request.toString());
+
+                new AddItemTask().execute(request.toString());
+
                 Intent intent = new Intent(addItemButton.getContext(), ListActivity.class);
                 startActivity(intent);
             }
@@ -105,5 +140,33 @@ public class AddItemActivity extends AppCompatActivity {
             ex.printStackTrace();
         }
         return coordinates;
+    }
+
+    private class AddItemTask extends AsyncTask<String, String, String> {
+        @Override
+        protected String doInBackground(String... data) {
+            try {
+                MediaType JSON = MediaType.parse("application/json; charset=utf-8");
+                OkHttpClient client = new OkHttpClient();
+                RequestBody body = RequestBody.create(JSON, data[0]);
+
+                Request request = new Request.Builder()
+                        .url(Constants.REST_ENDPOINT + "/item")
+                        .post(body)
+                        .build();
+
+                Response response = client.newCall(request).execute();
+                return response.body().string();
+            }
+            catch(Exception e) {
+                Log.e("ERROR", e.getMessage(), e);
+                return null;
+            }
+        }
+
+        @Override
+        protected void onPostExecute(String json) {
+            Log.d(TAG, "Item: " + json);
+        }
     }
 }

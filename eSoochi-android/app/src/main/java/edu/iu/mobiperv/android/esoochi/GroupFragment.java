@@ -14,10 +14,14 @@ import android.widget.ArrayAdapter;
 import android.widget.EditText;
 import android.widget.ListView;
 
+import org.json.JSONException;
+import org.json.JSONObject;
+
 import java.util.ArrayList;
 import java.util.List;
 
 import edu.iu.mobiperv.android.esoochi.edu.iu.mobiperv.android.esoochi.util.GlobalUtils;
+import edu.iu.mobiperv.android.esoochi.edu.iu.mobiperv.android.esoochi.util.SignedInUser;
 
 
 public class GroupFragment extends Fragment {
@@ -97,11 +101,13 @@ public class GroupFragment extends Fragment {
 
         List<String> groupsFromServer = new ArrayList<String>();
 
-        // TODO: Return data from server. Returning dummy data for now.
-        groupsFromServer.add("Party group");
-        groupsFromServer.add("Roommates group");
-        groupsFromServer.add("3 Hoosiers");
-        groupsFromServer.add("Rambo group");
+        for(JSONObject group : SignedInUser.getGroups()) {
+            try {
+                groupsFromServer.add(group.getString("name"));
+            } catch (JSONException e) {
+                Log.e("ERROR", e.getMessage(), e);
+            }
+        }
 
         return groupsFromServer;
     }

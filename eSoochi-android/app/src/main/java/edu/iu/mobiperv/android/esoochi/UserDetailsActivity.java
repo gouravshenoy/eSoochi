@@ -19,14 +19,11 @@ import com.google.android.gms.common.api.ResultCallback;
 import com.google.android.gms.common.api.Status;
 import com.squareup.picasso.Picasso;
 
+import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
 
-import java.io.BufferedReader;
-import java.io.InputStreamReader;
-import java.net.HttpURLConnection;
-import java.net.URL;
-
+import edu.iu.mobiperv.android.esoochi.edu.iu.mobiperv.android.esoochi.util.Constants;
 import edu.iu.mobiperv.android.esoochi.edu.iu.mobiperv.android.esoochi.util.SignedInUser;
 import okhttp3.MediaType;
 import okhttp3.OkHttpClient;
@@ -194,6 +191,18 @@ public class UserDetailsActivity extends AppCompatActivity implements
                 JSONObject jsonObj = new JSONObject(json);
                 SignedInUser.setUserId(jsonObj.getJSONObject("user").getString("id"));
                 Log.d(TAG, "UserID: " + SignedInUser.getUserId());
+
+                if(jsonObj.getJSONObject("user").has("groups")) {
+                    Object groups = jsonObj.getJSONObject("user").get("groups");
+                    if (groups instanceof JSONArray) {
+                        for (int i = 0; i < ((JSONArray) groups).length(); i++) {
+                            SignedInUser.getGroups().add(((JSONArray) groups).getJSONObject(i));
+                        }
+                    } else {
+                        SignedInUser.getGroups().add((JSONObject) groups);
+                    }
+                }
+                Log.d(TAG, "Groups: " + SignedInUser.getGroups());
             } catch (JSONException e) {
                 Log.e("ERROR", e.getMessage(), e);
             }
