@@ -1,7 +1,7 @@
 package edu.iu.mobiperv.android.esoochi;
 
 import android.content.Intent;
-import android.net.Uri;
+import android.os.AsyncTask;
 import android.support.annotation.NonNull;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
@@ -19,8 +19,20 @@ import com.google.android.gms.common.api.ResultCallback;
 import com.google.android.gms.common.api.Status;
 import com.squareup.picasso.Picasso;
 
-import edu.iu.mobiperv.android.esoochi.edu.iu.mobiperv.android.esoochi.util.GoogleAuthClient;
+import org.json.JSONException;
+import org.json.JSONObject;
+
+import java.io.BufferedReader;
+import java.io.InputStreamReader;
+import java.net.HttpURLConnection;
+import java.net.URL;
+
 import edu.iu.mobiperv.android.esoochi.edu.iu.mobiperv.android.esoochi.util.SignedInUser;
+import okhttp3.MediaType;
+import okhttp3.OkHttpClient;
+import okhttp3.Request;
+import okhttp3.RequestBody;
+import okhttp3.Response;
 
 public class UserDetailsActivity extends AppCompatActivity implements
         GoogleApiClient.OnConnectionFailedListener,
@@ -51,6 +63,7 @@ public class UserDetailsActivity extends AppCompatActivity implements
 
         // button listeners
         findViewById(R.id.sign_out_button).setOnClickListener(this);
+        findViewById(R.id.proceed_btn).setOnClickListener(this);
 
         // [START configure_signin]
         // Configure sign-in to request the user's ID, email address, and basic
@@ -82,6 +95,23 @@ public class UserDetailsActivity extends AppCompatActivity implements
         mDispNameTxtView.setText(mGoogleAccount.getDisplayName());
         mUserIdTxtView.setText(mGoogleAccount.getId());
         mEmailTxtView.setText(mGoogleAccount.getEmail());
+
+        JSONObject data = new JSONObject();
+        JSONObject request = new JSONObject();
+
+        try {
+            data.put("googleId", mGoogleAccount.getId());
+            data.put("photoUrl", mGoogleAccount.getPhotoUrl());
+            data.put("emailAddress", mGoogleAccount.getEmail());
+            data.put("fullName", mGoogleAccount.getDisplayName());
+            request.put("user", data);
+        } catch (JSONException e) {
+            Log.e("ERROR", e.getMessage(), e);
+        }
+
+        Log.d(TAG, "Sending JSON data for Create User: " + request.toString());
+
+        new CreateUserTask().execute(request.toString());
     }
 
     // [START signOut]
@@ -95,24 +125,35 @@ public class UserDetailsActivity extends AppCompatActivity implements
         }
 
         Auth.GoogleSignInApi.signOut(mGoogleApiClient).setResultCallback(
-                new ResultCallback<Status>() {
-                    @Override
-                    public void onResult(Status status) {
-                        // [START_EXCLUDE]
-                        Log.d(TAG, "Navigating to SigininActivity");
-                        Intent i = new Intent(getApplicationContext(), SigninActivity.class);
-                        startActivity(i);
-                        // [END_EXCLUDE]
-                    }
-                });
+            new ResultCallback<Status>() {
+                @Override
+                public void onResult(Status status) {
+                    // [START_EXCLUDE]
+                    Log.d(TAG, "Navigating to SigininActivity");
+                    Intent i = new Intent(getApplicationContext(), SigninActivity.class);
+                    startActivity(i);
+                    // [END_EXCLUDE]
+                }
+            });
     }
     // [END signOut]
+
+    // [START proceed]
+    private void proceed() {
+        Log.d(TAG, "Starting List Activity");
+        Intent i = new Intent(getApplicationContext(), ListActivity.class);
+        startActivity(i);
+    }
+    // [END proceed]
 
     @Override
     public void onClick(View v) {
         switch (v.getId()) {
             case R.id.sign_out_button:
                 signOut();
+                break;
+            case R.id.proceed_btn:
+                proceed();
                 break;
         }
     }
@@ -123,4 +164,40 @@ public class UserDetailsActivity extends AppCompatActivity implements
         // be available.
         Log.d(TAG, "onConnectionFailed:" + connectionResult);
     }
+
+    private class CreateUserTask extends AsyncTask<String, String, String> {
+        @Override
+        protected String doInBackground(String... data) {
+            try {
+                MediaType JSON = MediaType.parse("application/json; charset=utf-8");
+                OkHttpClient client = new OkHttpClient();
+                RequestBody body = RequestBody.create(JSON, data[0]);
+
+                Request request = new Request.Builder()
+                        .url("http://54.85.51.216:8085/esoochi/rest/user")
+                        .post(body)
+                        .build();
+
+                Response response = client.newCall(request).execute();
+                return response.body().string();
+            }
+            catch(Exception e) {
+                Log.e("ERROR", e.getMessage(), e);
+                return null;
+            }
+        }
+
+        @Override
+        protected void onPostExecute(String json) {
+            findViewById(R.id.proceed_btn).setVisibility(View.VISIBLE);
+            try {
+                JSONObject jsonObj = new JSONObject(json);
+                SignedInUser.setUserId(jsonObj.getJSONObject("user").getString("id"));
+                Log.d(TAG, "UserID: " + SignedInUser.getUserId());
+            } catch (JSONException e) {
+                Log.e("ERROR", e.getMessage(), e);
+            }
+        }
+    }
+
 }
