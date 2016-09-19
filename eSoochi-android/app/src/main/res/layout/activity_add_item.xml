@@ -32,6 +32,17 @@
             android:ems="10"
             android:id="@+id/item_name_text" />
 
+        <TextView
+            android:text="Select the group to which you want to add the item."
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:id="@+id/group_select_label" />
+
+        <Spinner
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:id="@+id/group_select_spinner" />
+
         <EditText
             android:layout_width="match_parent"
             android:layout_height="wrap_content"

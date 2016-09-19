@@ -7,8 +7,11 @@ import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.View;
+import android.widget.AdapterView;
+import android.widget.ArrayAdapter;
 import android.widget.Button;
 import android.widget.EditText;
+import android.widget.Spinner;
 
 import java.io.BufferedReader;
 import java.io.InputStreamReader;
@@ -25,6 +28,9 @@ public class AddItemActivity extends AppCompatActivity {
 
     private static final String TAG = "AddItemActivity";
 
+    Spinner group_select_spinner;
+    String selectedGroup;
+
     Button addItemButton;
     EditText item_name_text;
     EditText store_addr_text;
@@ -34,9 +40,25 @@ public class AddItemActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_add_item);
 
+        group_select_spinner = (Spinner) findViewById(R.id.group_select_spinner);
         addItemButton = (Button) findViewById(R.id.submit_item_button);
         item_name_text = (EditText) findViewById(R.id.item_name_text);
         store_addr_text = (EditText) findViewById(R.id.store_addr_text);
+
+        group_select_spinner.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
+            @Override
+            public void onItemSelected(AdapterView<?> adapterView, View view, int i, long l) {
+                selectedGroup = (String) adapterView.getItemAtPosition(i);
+            }
+
+            @Override
+            public void onNothingSelected(AdapterView<?> adapterView) {
+
+            }
+        });
+        ArrayAdapter<String> adapter = new ArrayAdapter<String>(this,
+                android.R.layout.simple_spinner_dropdown_item, GlobalUtils.groupList);
+        group_select_spinner.setAdapter(adapter);
 
         addItemButton.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -47,7 +69,8 @@ public class AddItemActivity extends AppCompatActivity {
                 GlobalUtils.itemList.add(item_name_text.getText().toString());
 
                 // TODO: Store item to backend coordinates.
-                Log.d(TAG, "Adding item " + item_name_text.getText().toString() + " to backend with gps coordinates: "
+                Log.d(TAG, "Adding item " + item_name_text.getText().toString() + " to group "
+                        + selectedGroup + " with gps coordinates: "
                         + coordinates[0] + " | " + coordinates[1]);
 
                 Intent intent = new Intent(addItemButton.getContext(), ListActivity.class);
