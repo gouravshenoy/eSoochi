@@ -101,8 +101,8 @@ public class JPAUtilTest {
 //		System.out.println("Saving group...");
 //		JPAUtil.saveEntity(ug);
 		
-		User u = JPAUtil.findUserByGoogleId("fe3dsd32qsajoisss");
-		System.out.println(u);
+//		User u = JPAUtil.findUserByGoogleId("fe3dsd32qsajoisss");
+//		System.out.println(u);
 	}
 
 }

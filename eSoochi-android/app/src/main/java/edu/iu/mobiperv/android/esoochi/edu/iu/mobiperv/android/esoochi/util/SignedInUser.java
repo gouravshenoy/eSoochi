@@ -9,6 +9,8 @@ public class SignedInUser {
 
     private static GoogleSignInAccount mGoogleAccount;
 
+    private static String userId;
+
     private static SignedInUser instance = null;
 
     protected SignedInUser() {}
@@ -27,6 +29,14 @@ public class SignedInUser {
 
         // return the instance
         return instance;
+    }
+
+    public static String getUserId() {
+        return userId;
+    }
+
+    public static void setUserId(String userId) {
+        SignedInUser.userId = userId;
     }
 
     public GoogleSignInAccount getAccount() {

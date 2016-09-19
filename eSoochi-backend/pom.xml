@@ -10,7 +10,7 @@
 	<properties>
 		<!-- Jetty -->
 		<jettyVersion>9.2.11.v20150529</jettyVersion>
-		
+
 		<!-- JPA Version -->
 		<jpa.version>2.4.1</jpa.version>
 
@@ -32,7 +32,7 @@
 			<artifactId>wink-server</artifactId>
 			<version>1.4</version>
 		</dependency>
-		
+
 		<dependency>
 			<groupId>org.apache.wink</groupId>
 			<artifactId>wink-json-provider</artifactId>
@@ -43,6 +43,13 @@
 			<groupId>org.json</groupId>
 			<artifactId>json</artifactId>
 			<version>20160212</version>
+		</dependency>
+
+		<!-- Apache WINK Client -->
+		<dependency>
+			<groupId>org.apache.wink</groupId>
+			<artifactId>wink-client</artifactId>
+			<version>1.4</version>
 		</dependency>
 
 		<!-- Apache Commons Logging -->
@@ -87,7 +94,7 @@
 			<version>${junit.version}</version>
 			<scope>test</scope>
 		</dependency>
-		
+
 		<!-- Jetty server -->
 		<dependency>
 			<groupId>org.eclipse.jetty</groupId>
