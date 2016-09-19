@@ -1,10 +1,12 @@
 package edu.iu.mobiperv.android.esoochi;
 
+import android.content.Intent;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.ListView;
 
@@ -39,9 +41,22 @@ public class ItemFragment extends Fragment {
 
         GlobalUtils.itemList = getItemsFromServer();
         ArrayAdapter<String> adapter = new ArrayAdapter<String>(rootView.getContext(),
-                android.R.layout.select_dialog_multichoice, GlobalUtils.itemList);
+                android.R.layout.simple_list_item_1, GlobalUtils.itemList);
 
         itemListView.setAdapter(adapter);
+
+        itemListView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
+            @Override
+            public void onItemClick(AdapterView<?> adapterView, View view, int i, long l) {
+                String selectedItem = (String) adapterView.getItemAtPosition(i);
+
+                Intent intent = new Intent(itemListView.getContext(), DetailItemActivity.class);
+                Bundle b = new Bundle();
+                b.putString("selectedItem", selectedItem);
+                intent.putExtras(b); //Put your id to your next Intent
+                startActivity(intent);
+            }
+        });
 
         // Inflate the layout for this fragment
         return rootView;
