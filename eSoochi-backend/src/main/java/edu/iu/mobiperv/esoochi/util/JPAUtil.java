@@ -49,6 +49,29 @@ public class JPAUtil {
 		emf.close();
 	}
 	
+	@SuppressWarnings("unchecked")
+	public static User findUserByGoogleId(String googleId) {
+		// Connection details loaded from persistence.xml to create EntityManagerFactory.
+		EntityManagerFactory emf = Persistence.createEntityManagerFactory("jpa-esoochi");
+
+		EntityManager em = emf.createEntityManager();
+		
+		Query query = em.createQuery("SELECT u FROM User u WHERE u.googleId='" + googleId +"'");
+		List<Object> result = query.getResultList();
+		
+		User user = null;
+		if(!result.isEmpty()) {
+			user = (User) result.get(0);
+			user.getGroups(); // lazy load
+		}
+		
+		// Closing connection.
+		em.close();
+		emf.close();
+		
+		return user;
+	}
+	
 	/**
 	 * Find user.
 	 *

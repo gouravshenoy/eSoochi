@@ -65,15 +65,23 @@ public class UserResource {
 		ResponseBuilder builder;
 		try {
 			logger.info("UserResource.createUser | user: " + user);
-			User userEntity = new User();
-			userEntity.setGoogleId(user.getGoogleId());
-			userEntity.setEmailAddress(user.getEmailAddress());
-			userEntity.setPhotoUrl(user.getPhotoUrl());
-			userEntity.setFullName(user.getFullName());
 			
-			JPAUtil.saveEntity(userEntity);
-			logger.info("Successfully added user record to db");
-			builder = Response.ok(JaxbTransformer.getUserJaxb(userEntity));
+			// check if user is present
+			User checkUser = JPAUtil.findUserByGoogleId(user.getGoogleId());
+			if(checkUser != null) {
+				logger.info("User is already present, returning");
+				builder = Response.ok(JaxbTransformer.getUserJaxb(checkUser)); 
+			} else {
+				User userEntity = new User();
+				userEntity.setGoogleId(user.getGoogleId());
+				userEntity.setEmailAddress(user.getEmailAddress());
+				userEntity.setPhotoUrl(user.getPhotoUrl());
+				userEntity.setFullName(user.getFullName());
+				
+				JPAUtil.saveEntity(userEntity);
+				logger.info("Successfully added user record to db");
+				builder = Response.ok(JaxbTransformer.getUserJaxb(userEntity));
+			}
 		} catch(Exception ex) {
 			logger.error("Exception creating user: " + ex, ex);
 			builder = Response.serverError().entity("{\"error\": \"" + ex.getMessage() + "\"}");
