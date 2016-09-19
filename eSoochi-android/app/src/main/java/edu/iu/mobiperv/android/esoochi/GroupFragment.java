@@ -1,6 +1,7 @@
 package edu.iu.mobiperv.android.esoochi;
 
 import android.content.DialogInterface;
+import android.content.Intent;
 import android.os.Bundle;
 import android.support.design.widget.FloatingActionButton;
 import android.support.v4.app.Fragment;
@@ -10,6 +11,7 @@ import android.view.LayoutInflater;
 import android.view.MotionEvent;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.EditText;
 import android.widget.ListView;
@@ -49,39 +51,21 @@ public class GroupFragment extends Fragment {
         //addGroupButton = (FloatingActionButton) rootView.findViewById(R.id.add_group_button);
 
         GlobalUtils.groupList = getGroupsFromServer();
-        ArrayAdapter<String> adapter = new ArrayAdapter<String>(rootView.getContext(),
+        final ArrayAdapter<String> adapter = new ArrayAdapter<String>(rootView.getContext(),
                 android.R.layout.simple_list_item_1, GlobalUtils.groupList);
 
         groupListView.setAdapter(adapter);
 
-        groupListView.setOnTouchListener(new View.OnTouchListener() {
+        groupListView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
             @Override
-            public boolean onTouch(View view, MotionEvent motionEvent) {
-                if(motionEvent.getAction() == MotionEvent.ACTION_UP){
-                    final EditText taskEditText = new EditText(rootView.getContext());
-                    AlertDialog dialog = new AlertDialog.Builder(rootView.getContext())
-                            .setTitle("Add a new item")
-                            .setMessage("What do you want to add next?")
-                            .setView(taskEditText)
-                            .setPositiveButton("Add", new DialogInterface.OnClickListener() {
-                                @Override
-                                public void onClick(DialogInterface dialog, int which) {
-                                    String task = String.valueOf(taskEditText.getText());
-                                    Log.d(TAG, "Item to add: " + task);
+            public void onItemClick(AdapterView<?> adapterView, View view, int i, long l) {
+                String selectedGrp = (String) adapterView.getItemAtPosition(i);
 
-                                    GlobalUtils.groupList.add(task);
-                                    groupListView.invalidate();
-                                    ArrayAdapter<String> adapter = new ArrayAdapter<String>(rootView.getContext(),
-                                            android.R.layout.simple_list_item_1, GlobalUtils.groupList);
-                                    groupListView.setAdapter(adapter);
-
-                                }
-                            })
-                            .setNegativeButton("Cancel", null)
-                            .create();
-                    dialog.show();
-                }
-                return true;
+                Intent intent = new Intent(rootView.getContext(), GroupItemListActivity.class);
+                Bundle b = new Bundle();
+                b.putString("selectedGroup", selectedGrp);
+                intent.putExtras(b); //Put your id to your next Intent
+                startActivity(intent);
             }
         });
 
