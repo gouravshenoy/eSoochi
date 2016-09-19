@@ -1,0 +1,73 @@
+<?xml version="1.0" encoding="UTF-8" standalone="yes"?>
+<xs:schema version="1.0" xmlns:xs="http://www.w3.org/2001/XMLSchema">
+
+	<!-- 
+		XML Schema Definition for JAXB classes
+		@author: Gourav Shenoy 
+	-->
+	
+	<!-- Type wrappers -->
+	
+	<xs:element name="userList" type="userList" />
+	<xs:element name="userGroupList" type="userGroupList" />
+	
+	<xs:element name="user" type="user" />
+	<xs:element name="userGroup" type="userGroup" />
+	<xs:element name="inventoryItem" type="inventoryItem" />
+
+	<!-- Type definitions -->	
+	
+	<xs:complexType name="userList">
+		<xs:sequence>
+			<xs:element name="userList" type="user" minOccurs="0" maxOccurs="unbounded"/>
+		</xs:sequence>
+	</xs:complexType>
+	
+	<xs:complexType name="userGroupList">
+		<xs:sequence>
+			<xs:element name="userGroupList" type="userGroup" minOccurs="0" maxOccurs="unbounded"/>
+		</xs:sequence>
+	</xs:complexType>
+	
+	<xs:complexType name="user">
+		<xs:sequence>
+			<xs:element name="id" type="xs:string" minOccurs="0" />
+			<xs:element name="googleId" type="xs:string" minOccurs="0" />
+			<xs:element name="photoUrl" type="xs:string" minOccurs="0" />
+			<xs:element name="fullName" type="xs:string" minOccurs="0" />
+			<xs:element name="emailAddress" type="xs:string" minOccurs="0" />
+			<xs:element name="createdAt" type="xs:dateTime" minOccurs="0" />
+			<xs:element name="updatedAt" type="xs:dateTime" minOccurs="0" />
+			<xs:element name="groups" type="userGroup" minOccurs="0" maxOccurs="unbounded" />
+		</xs:sequence>
+	</xs:complexType>
+	
+	<xs:complexType name="userGroup">
+		<xs:sequence>
+			<xs:element name="id" type="xs:string" minOccurs="0" />
+			<xs:element name="name" type="xs:string" minOccurs="0" />
+			<xs:element name="createdAt" type="xs:dateTime" minOccurs="0" />
+			<xs:element name="updatedAt" type="xs:dateTime" minOccurs="0" />
+			<xs:element name="users" type="user" minOccurs="0" maxOccurs="unbounded" />
+			<xs:element name="items" type="inventoryItem" minOccurs="0" maxOccurs="unbounded" />
+		</xs:sequence>
+	</xs:complexType>
+	
+	<xs:complexType name="inventoryItem">
+		<xs:sequence>
+			<xs:element name="itemId" type="xs:string" minOccurs="0" />
+			<xs:element name="itemName" type="xs:string" minOccurs="0" />
+			<xs:element name="createdAt" type="xs:dateTime" minOccurs="0" />
+			<xs:element name="updatedAt" type="xs:dateTime" minOccurs="0" />
+			<xs:element name="addedByUserName" type="xs:string" minOccurs="0" />
+			<xs:element name="addedByUserId" type="xs:string" minOccurs="0" />
+			<xs:element name="purchasedByUserName" type="xs:string" minOccurs="0" />
+			<xs:element name="purchasedByUserId" type="xs:string" minOccurs="0" />
+			<xs:element name="addedInGroupName" type="xs:string" minOccurs="0" />
+			<xs:element name="addedInGroupId" type="xs:string" minOccurs="0" />
+			<xs:element name="address" type="xs:string" minOccurs="0" />
+			<xs:element name="latitude" type="xs:double" minOccurs="0" />
+			<xs:element name="longitude" type="xs:double" minOccurs="0" />
+		</xs:sequence>
+	</xs:complexType>
+</xs:schema>
