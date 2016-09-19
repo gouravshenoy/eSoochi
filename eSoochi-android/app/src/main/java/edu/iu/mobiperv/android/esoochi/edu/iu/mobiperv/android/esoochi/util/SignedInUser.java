@@ -5,7 +5,9 @@ import com.google.android.gms.auth.api.signin.GoogleSignInAccount;
 import org.json.JSONObject;
 
 import java.util.ArrayList;
+import java.util.HashSet;
 import java.util.List;
+import java.util.Set;
 
 /**
  * Created by goshenoy on 9/14/16.
@@ -16,7 +18,7 @@ public class SignedInUser {
 
     private static String userId;
 
-    private static List<JSONObject> groups = new ArrayList<JSONObject>();
+    private static Set<JSONObject> groups = new HashSet<JSONObject>();
 
     private static SignedInUser instance = null;
 
@@ -38,7 +40,7 @@ public class SignedInUser {
         return instance;
     }
 
-    public static List<JSONObject> getGroups() {
+    public static Set<JSONObject> getGroups() {
         return groups;
     }
 

@@ -19,6 +19,7 @@ import org.json.JSONObject;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Set;
+import java.util.concurrent.TimeUnit;
 
 import edu.iu.mobiperv.android.esoochi.edu.iu.mobiperv.android.esoochi.util.Constants;
 import edu.iu.mobiperv.android.esoochi.edu.iu.mobiperv.android.esoochi.util.GlobalUtils;
@@ -33,6 +34,8 @@ import okhttp3.Response;
 public class ItemFragment extends Fragment {
 
     ListView itemListView;
+    ArrayAdapter<String> adapter;
+
     private static final String TAG = "eSoochi.ItemFragment";
 
     public ItemFragment() {
@@ -55,9 +58,10 @@ public class ItemFragment extends Fragment {
         itemListView = (ListView) rootView.findViewById(R.id.list_items);
 
         GlobalUtils.itemList = getItemsFromServer();
-        ArrayAdapter<String> adapter = new ArrayAdapter<String>(rootView.getContext(),
+        adapter = new ArrayAdapter<String>(rootView.getContext(),
                 android.R.layout.simple_list_item_1, new ArrayList<>(GlobalUtils.itemList));
         itemListView.setAdapter(adapter);
+        adapter.notifyDataSetChanged();
 
         itemListView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
             @Override
@@ -99,6 +103,9 @@ public class ItemFragment extends Fragment {
             Log.e("ERROR", e.getMessage(), e);
         }
 
+        GlobalUtils.itemList.add("Vegetables");
+        GlobalUtils.itemList.add("Fruits");
+        GlobalUtils.itemList.add("Cereals");
         return GlobalUtils.itemList;
     }
 

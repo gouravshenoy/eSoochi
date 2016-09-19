@@ -39,6 +39,7 @@ public class UserDetailsActivity extends AppCompatActivity implements
     private TextView mDispNameTxtView;
     private TextView mUserIdTxtView;
     private TextView mEmailTxtView;
+    private TextView mGrpTxtView;
 
     // Image views
     private ImageView userImg;

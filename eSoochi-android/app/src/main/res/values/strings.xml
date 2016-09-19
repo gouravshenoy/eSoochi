@@ -1,7 +1,7 @@
 <resources>
     <string name="app_name">eSoochi</string>
     <string name="title_text">eSoochi Mobile</string>
-    <string name="tagline">// Insert Tagline Here //</string>
+    <string name="tagline">Your inventory.. made easy..</string>
 
     <!-- Sign-in status messages -->
     <string name="signed_in_fmt">Signed in as: %s</string>
