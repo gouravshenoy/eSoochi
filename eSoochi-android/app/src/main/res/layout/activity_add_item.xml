@@ -40,6 +40,11 @@
             android:ems="10"
             android:id="@+id/store_addr_text" />
 
+        <com.google.android.gms.maps.MapView
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:id="@+id/mapView" />
+
         <Button
             android:text="Click to Add Item"
             android:layout_width="match_parent"

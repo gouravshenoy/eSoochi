@@ -55,10 +55,10 @@ public class ItemFragment extends Fragment {
 
         List<String> itemsFromServer;
 
+        // TODO: Return data from server. Returning dummy data with following dummy logic.
         if(GlobalUtils.itemList != null && GlobalUtils.itemList.size() != 0) {
             itemsFromServer = GlobalUtils.itemList;
         } else {
-            // TODO: Return data from server. Returning dummy data for now.
             itemsFromServer = new ArrayList<String>();
             itemsFromServer.add("Cabbage");
             itemsFromServer.add("Chicken");

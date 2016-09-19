@@ -1,12 +1,23 @@
 package edu.iu.mobiperv.android.esoochi;
 
 import android.content.Intent;
+import android.location.Address;
+import android.location.Geocoder;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
+
+import java.io.BufferedReader;
+import java.io.InputStreamReader;
+import java.net.HttpURLConnection;
+import java.net.URL;
+import java.util.List;
+import java.util.Locale;
+
+import javax.net.ssl.HttpsURLConnection;
 
 import edu.iu.mobiperv.android.esoochi.edu.iu.mobiperv.android.esoochi.util.GlobalUtils;
 
@@ -58,6 +69,18 @@ public class AddItemActivity extends AppCompatActivity {
         coordinates[0] = 25.09434534;
         coordinates[1] = 70.34534343;
 
+        try {
+            Geocoder geocoder = new Geocoder(this, Locale.getDefault());
+            List<Address> addresses = geocoder.getFromLocationName(location, 1);
+
+            Address addrToConsider = addresses.get(0);
+
+            coordinates[0] = addrToConsider.getLatitude();
+            coordinates[1] = addrToConsider.getLongitude();
+
+        } catch (Exception ex) {
+            ex.printStackTrace();
+        }
         return coordinates;
     }
 }
